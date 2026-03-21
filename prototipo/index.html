@@ -197,6 +197,36 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Gestión de Pagos (Mensualidades) -->
+            <section class="admin-card">
+                <div class="admin-card-header">
+                    <h2>💳 Gestión de Pagos (Mensualidades)</h2>
+                </div>
+                <div class="admin-card-body">
+                    <div class="toolbar">
+                        <input type="text" id="admin-input-pago-placa" class="form-control" placeholder="Placa (Ej: ABC-123)" style="flex: 1; max-width: 250px;">
+                        <input type="text" id="admin-input-pago-cliente" class="form-control" placeholder="Nombre Cliente" style="flex: 1; max-width: 250px;">
+                        <input type="date" id="admin-input-pago-fecha" class="form-control" style="flex: 1; max-width: 200px;">
+                        <button id="admin-btn-create-pago" class="btn btn-primary btn-sm">+ Registrar Pago</button>
+                    </div>
+                    
+                    <table class="data-table" style="margin-top: 15px;">
+                        <thead>
+                            <tr>
+                                <th>PLACA</th>
+                                <th>CLIENTE</th>
+                                <th>FECHA VENCIMIENTO</th>
+                                <th>ESTADO</th>
+                                <th>ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-pagos-tbody">
+                            <!-- Generado por JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         </div>
     </main>
 

@@ -35,10 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
         { codigo: 'M1', tipo: 'Moto' }, { codigo: 'M2', tipo: 'Moto' },
         { codigo: 'M3', tipo: 'Moto' }, { codigo: 'M4', tipo: 'Moto' }
     ];
+    
+    // Default vehiculos with designated valid cells to match new system
     let vehiculosAdentro = JSON.parse(localStorage.getItem('vehiculosAdentro')) || [
-        { placa: 'XYZ-123', tipo: 'Carro', hora: '10:15 AM', mensualidad: 'Activa', novedades: 'Ninguna' },
-        { placa: 'MTO-001', tipo: 'Moto', hora: '11:30 AM', mensualidad: 'Inactiva', novedades: 'Rayón lateral' },
-        { placa: 'DEF-456', tipo: 'Carro', hora: '12:05 PM', mensualidad: 'Ocasional', novedades: '' }
+        { placa: 'XYZ-123', tipo: 'Carro', celda: 'C1', hora: '10:15 AM', mensualidad: 'Activa', novedades: 'Ninguna' },
+        { placa: 'MTO-001', tipo: 'Moto', celda: 'M1', hora: '11:30 AM', mensualidad: 'Inactiva (Vencida)', novedades: 'Rayón lateral' },
+        { placa: 'DEF-456', tipo: 'Carro', celda: 'C2', hora: '12:05 PM', mensualidad: 'Ocasional', novedades: '' }
+    ];
+
+    let adminPagos = JSON.parse(localStorage.getItem('adminPagos')) || [
+        { placa: 'XYZ-123', cliente: 'Carlos Vargas', fechaVencimiento: '2026-12-31' },
     ];
 
     function saveToStorage() {
@@ -46,13 +52,20 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('adminRoles', JSON.stringify(adminRoles));
         localStorage.setItem('adminCeldas', JSON.stringify(adminCeldas));
         localStorage.setItem('vehiculosAdentro', JSON.stringify(vehiculosAdentro));
+        localStorage.setItem('adminPagos', JSON.stringify(adminPagos));
+    }
+
+    function verificarMensualidad(placa) {
+        const pago = adminPagos.find(p => p.placa === placa);
+        if(!pago) return 'Ocasional';
+        // Simplified check date logic (ignore timezone mismatch offset)
+        const hoyStr = new Date().toISOString().split('T')[0];
+        return pago.fechaVencimiento >= hoyStr ? 'Activa' : 'Inactiva (Vencida)';
     }
 
     let celdasTotales = adminCeldas.length;
 
     // --- LÓGICA VISTA OPERARIO ---
-
-    // Selectores Operario
     const tbody = document.getElementById('vehiculos-tbody');
     const cuposCount = document.getElementById('cupos-count');
     const txtPlaca = document.getElementById('placa');
@@ -61,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnEntrada = document.getElementById('btn-registrar-entrada');
     const btnSalida = document.getElementById('btn-registrar-salida');
 
-    // Estado Formulario Radio Buttons
     radiosTipo.forEach(radio => {
         radio.addEventListener('change', (e) => {
             document.querySelectorAll('.radio-card').forEach(rc => rc.classList.remove('active'));
@@ -69,17 +81,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Simulación Validación Mensualidad al escribir placa
     txtPlaca.addEventListener('input', (e) => {
         const val = e.target.value.toUpperCase();
         if(val.length >= 5) {
-            // Mostrar estado mock
-            if(val.includes('1')){
+            let estadoMensualidad = verificarMensualidad(val);
+            if(estadoMensualidad === 'Activa'){
                 boxMensualidad.innerHTML = '✅ Estado de Mensualidad: <strong style="color:#166534">Activa (Prepagada)</strong>';
                 boxMensualidad.style.backgroundColor = '#dcfce7';
                 boxMensualidad.style.borderColor = '#bbf7d0';
+            } else if (estadoMensualidad.includes('Inactiva')) {
+                boxMensualidad.innerHTML = '⚠️ Estado de Mensualidad: <strong style="color:#991b1b">Inactiva (Vencida)</strong>';
+                boxMensualidad.style.backgroundColor = '#fecaca';
+                boxMensualidad.style.borderColor = '#f87171';
             } else {
-                boxMensualidad.innerHTML = '⚠️ Estado de Mensualidad: <strong style="color:#92400e">Ocasional / Sin plan activo</strong>';
+                boxMensualidad.innerHTML = 'ℹ️ Estado de Mensualidad: <strong style="color:#92400e">Ocasional / Sin plan activo</strong>';
                 boxMensualidad.style.backgroundColor = '#fef3c7';
                 boxMensualidad.style.borderColor = '#fde68a';
             }
@@ -90,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Renderizar Tabla Operario
     const inputSearchPlaca = document.getElementById('operario-search-placa');
     if (inputSearchPlaca) {
         inputSearchPlaca.addEventListener('input', (e) => renderVehiculos(e.target.value));
@@ -98,37 +112,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderVehiculos(filter = '') {
         tbody.innerHTML = '';
-        celdasTotales = adminCeldas.length; // re-sync
+        celdasTotales = adminCeldas.length; 
         
         let filtrados = vehiculosAdentro.filter(v => v.placa.toLowerCase().includes(filter.toLowerCase()));
         
         filtrados.forEach((v) => {
             const tr = document.createElement('tr');
-            
             let tipoBadge = v.tipo === 'Carro' ? '<span class="type-badge type-car">🚙 Carro</span>' : '<span class="type-badge type-moto">🏍️ Moto</span>';
             
             let classMs = '';
             if(v.mensualidad === 'Activa') classMs = 'ms-activa';
-            else if(v.mensualidad === 'Inactiva') classMs = 'ms-inactiva';
+            else if(v.mensualidad.includes('Inactiva')) classMs = 'ms-inactiva';
             else classMs = 'ms-ocasional';
 
             tr.innerHTML = `
                 <td>
-                    <strong>${v.placa}</strong>
-                    ${v.novedades ? `<br><small style="color:#666; font-size:0.8em">✏️ ${v.novedades}</small>` : ''}
+                    <strong>\${v.placa}</strong> <span style="color: #6366f1;">(\${v.celda || 'N/A'})</span>
+                    \${v.novedades ? \`<br><small style="color:#666; font-size:0.8em">✏️ \${v.novedades}</small>\` : ''}
                 </td>
-                <td>${tipoBadge}</td>
-                <td>${v.hora}</td>
-                <td><span class="mensualidad-badge ${classMs}">${v.mensualidad}</span></td>
-                <td><button class="btn-outline-red btn-dar-salida" data-idx="${vehiculosAdentro.indexOf(v)}">Dar Salida</button></td>
+                <td>\${tipoBadge}</td>
+                <td>\${v.hora}</td>
+                <td><span class="mensualidad-badge \${classMs}">\${v.mensualidad}</span></td>
+                <td><button class="btn-outline-red btn-dar-salida" data-idx="\${vehiculosAdentro.indexOf(v)}">Dar Salida</button></td>
             `;
             tbody.appendChild(tr);
         });
 
-        cuposCount.innerText = `${celdasTotales - vehiculosAdentro.length} / ${celdasTotales}`;
-        document.getElementById('table-summary').innerText = `Mostrando ${filtrados.length} vehículos.`;
+        cuposCount.innerText = `\${celdasTotales - vehiculosAdentro.length} / \${celdasTotales}`;
+        document.getElementById('table-summary').innerText = `Mostrando \${filtrados.length} vehículos.`;
 
-        // Eventos dar salida
         document.querySelectorAll('.btn-dar-salida').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const idx = e.target.getAttribute('data-idx');
@@ -136,13 +148,13 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        renderCeldasAdmin(); // Sincronizar con admin
+        renderCeldasAdmin();
     }
 
     btnEntrada.addEventListener('click', () => {
         celdasTotales = adminCeldas.length;
         if (vehiculosAdentro.length >= celdasTotales) {
-            return alert("No hay cupos disponibles. El parqueadero está lleno según la capacidad configurada.");
+            return alert("No hay cupos disponibles en el parqueadero.");
         }
 
         const placa = txtPlaca.value.toUpperCase();
@@ -151,17 +163,26 @@ document.addEventListener('DOMContentLoaded', () => {
         if (vehiculosAdentro.find(v => v.placa === placa)) return alert("El vehículo ya se encuentra adentro.");
 
         const tipoSelected = document.querySelector('input[name="tipo"]:checked').value;
+        const celdasOcupadas = vehiculosAdentro.map(v => v.celda);
+        const celdasDisponibles = adminCeldas.filter(c => c.tipo === tipoSelected && !celdasOcupadas.includes(c.codigo));
+
+        if (celdasDisponibles.length === 0) {
+            return alert(`Atención: No hay celdas disponibles para \${tipoSelected}.`);
+        }
+        
+        const celdaAsignada = celdasDisponibles[0].codigo;
         const novedades = document.getElementById('novedades').value.trim();
         const hora = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-        
-        let mensualidadMock = placa.includes('1') ? 'Activa' : 'Ocasional';
+        let estadoMensualidad = verificarMensualidad(placa);
 
-        vehiculosAdentro.push({ placa, tipo: tipoSelected, hora, mensualidad: mensualidadMock, novedades });
+        vehiculosAdentro.push({ placa, tipo: tipoSelected, hora, mensualidad: estadoMensualidad, novedades, celda: celdaAsignada });
         saveToStorage();
         
+        alert(`✅ Ingreso registrado.\nSe asignó la celda: \${celdaAsignada}`);
+
         txtPlaca.value = '';
         document.getElementById('novedades').value = '';
-        txtPlaca.dispatchEvent(new Event('input')); // Reset info box
+        txtPlaca.dispatchEvent(new Event('input'));
         
         if(inputSearchPlaca) renderVehiculos(inputSearchPlaca.value);
         else renderVehiculos();
@@ -185,17 +206,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const vehiculo = vehiculosAdentro[index];
         const horaSalida = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
         
-        let msg = `¿Confirmar salida de ${vehiculo.placa}?\nTipo: ${vehiculo.tipo}\nHora Ingreso: ${vehiculo.hora}\nHora Salida: ${horaSalida}\n`;
+        let msg = `¿Confirmar salida de \${vehiculo.placa}?\nCelda liberada: \${vehiculo.celda}\nTipo: \${vehiculo.tipo}\nHora Ingreso: \${vehiculo.hora}\nHora Salida: \${horaSalida}\n`;
         if (vehiculo.novedades) {
-            msg += `Novedades registradas: ${vehiculo.novedades}\n`;
+            msg += `Novedades registradas: \${vehiculo.novedades}\n`;
         }
         
         if(confirm(msg)){
             let cobroInfo = vehiculo.mensualidad === 'Activa' 
-                ? 'Vehículo con mensualidad activa. No genera cobro adicional.'
-                : 'Cobro calculado por el sistema backend: $4,500';
+                ? 'El vehículo tiene pago mensual vigente. No realizar cobros o deducción extra.'
+                : 'Cobro por tarifa ocasional/fraccionada calculado: $4,500';
             
-            alert(`✅ Salida registrada con éxito.\n${cobroInfo}`);
+            alert(`✅ Salida procesada.\n\${cobroInfo}`);
             
             vehiculosAdentro.splice(index, 1);
             saveToStorage();
@@ -204,7 +225,6 @@ document.addEventListener('DOMContentLoaded', () => {
             else renderVehiculos();
         }
     }
-
 
     // --- LÓGICA VISTA ADMINISTRADOR ---
 
@@ -218,16 +238,16 @@ document.addEventListener('DOMContentLoaded', () => {
         adminUsers.filter(u => u.nombre.toLowerCase().includes(filter.toLowerCase()) || u.usuario.toLowerCase().includes(filter.toLowerCase())).forEach((u, i) => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${u.nombre}</td>
-                <td>${u.cedula}</td>
-                <td>${u.usuario}</td>
-                <td>${u.rol}</td>
-                <td><span class="badge ${u.estado === 'ACTIVO' ? 'badge-active' : 'badge-inactive'}">${u.estado}</span></td>
+                <td>\${u.nombre}</td>
+                <td>\${u.cedula}</td>
+                <td>\${u.usuario}</td>
+                <td>\${u.rol}</td>
+                <td><span class="badge \${u.estado === 'ACTIVO' ? 'badge-active' : 'badge-inactive'}">\${u.estado}</span></td>
                 <td>
-                    <button class="btn-action red btn-delete-user" data-idx="${i}">🗑️ Eliminar</button>
-                    ${u.estado === 'ACTIVO' 
-                        ? `<button class="btn-action outline btn-toggle-user" data-idx="${i}">Desactivar</button>`
-                        : `<button class="btn-action blue btn-toggle-user" data-idx="${i}">Activar</button>`}
+                    <button class="btn-action red btn-delete-user" data-idx="\${i}">🗑️ Eliminar</button>
+                    \${u.estado === 'ACTIVO' 
+                        ? \`<button class="btn-action outline btn-toggle-user" data-idx="\${i}">Desactivar</button>\`
+                        : \`<button class="btn-action blue btn-toggle-user" data-idx="\${i}">Activar</button>\`}
                 </td>
             `;
             tbodyUsers.appendChild(tr);
@@ -278,9 +298,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const div = document.createElement('div');
             div.className = 'role-item';
             div.innerHTML = `
-                <span>${r.icono} <strong>${r.nombre}</strong></span>
+                <span>\${r.icono} <strong>\${r.nombre}</strong></span>
                 <div class="role-actions">
-                    <button class="btn-action red-outline btn-delete-role" data-idx="${i}">Eliminar</button>
+                    <button class="btn-action red-outline btn-delete-role" data-idx="\${i}">Eliminar</button>
                 </div>
             `;
             listRoles.appendChild(div);
@@ -316,25 +336,31 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderCeldasAdmin() {
         gridCeldas.innerHTML = '';
         let totales = adminCeldas.length;
-        let ocupadas = vehiculosAdentro.length > totales ? totales : vehiculosAdentro.length;
+        let ocupadas = vehiculosAdentro.length;
         let libres = totales - ocupadas;
 
         document.getElementById('stat-ocupadas').innerText = ocupadas;
         document.getElementById('stat-disponibles').innerText = libres;
         document.getElementById('stat-totales').innerText = totales;
 
-        adminCeldas.forEach((celda, index) => {
+        adminCeldas.forEach((celda) => {
             const div = document.createElement('div');
-            const isOcupada = index < ocupadas;
-            div.className = `celda ${isOcupada ? 'ocupada' : 'libre'}`;
+            const vehiculoOcupante = vehiculosAdentro.find(v => v.celda === celda.codigo);
+            
+            div.className = `celda \${vehiculoOcupante ? 'ocupada' : 'libre'}`;
             // Muestra código y tipo abreviado
-            div.innerHTML = `${celda.codigo}<br><small style="font-size:0.6em; font-weight:normal">${celda.tipo}</small>`;
+            div.innerHTML = `\${celda.codigo}<br><small style="font-size:0.6em; font-weight:normal">\${celda.tipo}</small>`;
+            
+            if (vehiculoOcupante) {
+                div.innerHTML += `<br><span style="font-size:0.7em; font-weight:bold; color: white;">\${vehiculoOcupante.placa}</span>`;
+            }
+
             gridCeldas.appendChild(div);
         });
         
         celdasTotales = totales;
         if (document.getElementById('cupos-count')) {
-             document.getElementById('cupos-count').innerText = `${totales - ocupadas} / ${totales}`;
+             document.getElementById('cupos-count').innerText = `\${totales - ocupadas} / \${totales}`;
         }
     }
 
@@ -354,8 +380,78 @@ document.addEventListener('DOMContentLoaded', () => {
         renderCeldasAdmin();
     });
 
+    // -- PAGOS (MENSUALIDADES) --
+    const tbodyPagos = document.getElementById('admin-pagos-tbody');
+    const btnCreatePago = document.getElementById('admin-btn-create-pago');
+    const inputPagoPlaca = document.getElementById('admin-input-pago-placa');
+    const inputPagoCliente = document.getElementById('admin-input-pago-cliente');
+    const inputPagoFecha = document.getElementById('admin-input-pago-fecha');
+
+    function renderPagos() {
+        if (!tbodyPagos) return;
+        tbodyPagos.innerHTML = '';
+        const hoyStr = new Date().toISOString().split('T')[0];
+        
+        adminPagos.forEach((p, i) => {
+            const tr = document.createElement('tr');
+            const isVigente = p.fechaVencimiento >= hoyStr;
+            tr.innerHTML = `
+                <td><strong>\${p.placa}</strong></td>
+                <td>\${p.cliente}</td>
+                <td>\${p.fechaVencimiento}</td>
+                <td><span class="badge \${isVigente ? 'badge-active' : 'badge-inactive'}">\${isVigente ? 'VIGENTE' : 'VENCIDA'}</span></td>
+                <td>
+                    <button class="btn-action red btn-delete-pago" data-idx="\${i}">🗑️ Eliminar</button>
+                </td>
+            `;
+            tbodyPagos.appendChild(tr);
+        });
+
+        document.querySelectorAll('.btn-delete-pago').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = e.target.getAttribute('data-idx');
+                if(confirm('¿Seguro de eliminar este registro de pago?')) {
+                    adminPagos.splice(idx, 1);
+                    saveToStorage();
+                    renderPagos();
+                    if(document.getElementById('placa')) document.getElementById('placa').dispatchEvent(new Event('input')); 
+                    if(inputSearchPlaca) renderVehiculos(inputSearchPlaca.value);
+                }
+            });
+        });
+    }
+
+    if (btnCreatePago) {
+        btnCreatePago.addEventListener('click', () => {
+            const placa = inputPagoPlaca.value.trim().toUpperCase();
+            const cliente = inputPagoCliente.value.trim();
+            const fecha = inputPagoFecha.value;
+
+            if(!placa || !cliente || !fecha) return alert('Por favor complete la placa, el cliente y la fecha de vencimiento.');
+
+            const idx = adminPagos.findIndex(p => p.placa === placa);
+            if(idx !== -1) {
+                adminPagos[idx] = { placa, cliente, fechaVencimiento: fecha };
+            } else {
+                adminPagos.push({ placa, cliente, fechaVencimiento: fecha });
+            }
+
+            inputPagoPlaca.value = '';
+            inputPagoCliente.value = '';
+            inputPagoFecha.value = '';
+            
+            saveToStorage();
+            renderPagos();
+            if(document.getElementById('placa')) document.getElementById('placa').dispatchEvent(new Event('input'));
+            if(inputSearchPlaca) renderVehiculos(inputSearchPlaca.value);
+            
+            alert('Pago registrado correctamente. Mensualidad extendida.');
+        });
+    }
+
     // Init Admin
     renderUsers();
     renderRoles();
+    renderPagos();
     renderVehiculos();
 });
