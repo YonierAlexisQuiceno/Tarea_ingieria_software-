@@ -127,19 +127,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
             tr.innerHTML = `
                 <td>
-                    <strong>\${v.placa}</strong> <span style="color: #6366f1;">(\${v.celda || 'N/A'})</span>
-                    \${v.novedades ? \`<br><small style="color:#666; font-size:0.8em">✏️ \${v.novedades}</small>\` : ''}
+                    <strong>${v.placa}</strong> <span style="color: #6366f1;">(${v.celda || 'N/A'})</span>
+                    ${v.novedades ? `<br><small style="color:#666; font-size:0.8em">✏️ ${v.novedades}</small>` : ''}
                 </td>
-                <td>\${tipoBadge}</td>
-                <td>\${v.hora}</td>
-                <td><span class="mensualidad-badge \${classMs}">\${v.mensualidad}</span></td>
-                <td><button class="btn-outline-red btn-dar-salida" data-idx="\${vehiculosAdentro.indexOf(v)}">Dar Salida</button></td>
+                <td>${tipoBadge}</td>
+                <td>${v.hora}</td>
+                <td><span class="mensualidad-badge ${classMs}">${v.mensualidad}</span></td>
+                <td><button class="btn-outline-red btn-dar-salida" data-idx="${vehiculosAdentro.indexOf(v)}">Dar Salida</button></td>
             `;
             tbody.appendChild(tr);
         });
 
-        cuposCount.innerText = `\${celdasTotales - vehiculosAdentro.length} / \${celdasTotales}`;
-        document.getElementById('table-summary').innerText = `Mostrando \${filtrados.length} vehículos.`;
+        cuposCount.innerText = `${celdasTotales - vehiculosAdentro.length} / ${celdasTotales}`;
+        document.getElementById('table-summary').innerText = `Mostrando ${filtrados.length} vehículos.`;
 
         document.querySelectorAll('.btn-dar-salida').forEach(btn => {
             btn.addEventListener('click', (e) => {
@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const celdasDisponibles = adminCeldas.filter(c => c.tipo === tipoSelected && !celdasOcupadas.includes(c.codigo));
 
         if (celdasDisponibles.length === 0) {
-            return alert(`Atención: No hay celdas disponibles para \${tipoSelected}.`);
+            return alert(`Atención: No hay celdas disponibles para ${tipoSelected}.`);
         }
         
         const celdaAsignada = celdasDisponibles[0].codigo;
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
         vehiculosAdentro.push({ placa, tipo: tipoSelected, hora, mensualidad: estadoMensualidad, novedades, celda: celdaAsignada });
         saveToStorage();
         
-        alert(`✅ Ingreso registrado.\nSe asignó la celda: \${celdaAsignada}`);
+        alert(`✅ Ingreso registrado.\nSe asignó la celda: ${celdaAsignada}`);
 
         txtPlaca.value = '';
         document.getElementById('novedades').value = '';
@@ -206,9 +206,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const vehiculo = vehiculosAdentro[index];
         const horaSalida = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
         
-        let msg = `¿Confirmar salida de \${vehiculo.placa}?\nCelda liberada: \${vehiculo.celda}\nTipo: \${vehiculo.tipo}\nHora Ingreso: \${vehiculo.hora}\nHora Salida: \${horaSalida}\n`;
+        let msg = `¿Confirmar salida de ${vehiculo.placa}?\nCelda liberada: ${vehiculo.celda}\nTipo: ${vehiculo.tipo}\nHora Ingreso: ${vehiculo.hora}\nHora Salida: ${horaSalida}\n`;
         if (vehiculo.novedades) {
-            msg += `Novedades registradas: \${vehiculo.novedades}\n`;
+            msg += `Novedades registradas: ${vehiculo.novedades}\n`;
         }
         
         if(confirm(msg)){
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ? 'El vehículo tiene pago mensual vigente. No realizar cobros o deducción extra.'
                 : 'Cobro por tarifa ocasional/fraccionada calculado: $4,500';
             
-            alert(`✅ Salida procesada.\n\${cobroInfo}`);
+            alert(`✅ Salida procesada.\n${cobroInfo}`);
             
             vehiculosAdentro.splice(index, 1);
             saveToStorage();
@@ -238,16 +238,16 @@ document.addEventListener('DOMContentLoaded', () => {
         adminUsers.filter(u => u.nombre.toLowerCase().includes(filter.toLowerCase()) || u.usuario.toLowerCase().includes(filter.toLowerCase())).forEach((u, i) => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>\${u.nombre}</td>
-                <td>\${u.cedula}</td>
-                <td>\${u.usuario}</td>
-                <td>\${u.rol}</td>
-                <td><span class="badge \${u.estado === 'ACTIVO' ? 'badge-active' : 'badge-inactive'}">\${u.estado}</span></td>
+                <td>${u.nombre}</td>
+                <td>${u.cedula}</td>
+                <td>${u.usuario}</td>
+                <td>${u.rol}</td>
+                <td><span class="badge ${u.estado === 'ACTIVO' ? 'badge-active' : 'badge-inactive'}">${u.estado}</span></td>
                 <td>
-                    <button class="btn-action red btn-delete-user" data-idx="\${i}">🗑️ Eliminar</button>
-                    \${u.estado === 'ACTIVO' 
-                        ? \`<button class="btn-action outline btn-toggle-user" data-idx="\${i}">Desactivar</button>\`
-                        : \`<button class="btn-action blue btn-toggle-user" data-idx="\${i}">Activar</button>\`}
+                    <button class="btn-action red btn-delete-user" data-idx="${i}">🗑️ Eliminar</button>
+                    ${u.estado === 'ACTIVO' 
+                        ? `<button class="btn-action outline btn-toggle-user" data-idx="${i}">Desactivar</button>`
+                        : `<button class="btn-action blue btn-toggle-user" data-idx="${i}">Activar</button>`}
                 </td>
             `;
             tbodyUsers.appendChild(tr);
@@ -298,9 +298,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const div = document.createElement('div');
             div.className = 'role-item';
             div.innerHTML = `
-                <span>\${r.icono} <strong>\${r.nombre}</strong></span>
+                <span>${r.icono} <strong>${r.nombre}</strong></span>
                 <div class="role-actions">
-                    <button class="btn-action red-outline btn-delete-role" data-idx="\${i}">Eliminar</button>
+                    <button class="btn-action red-outline btn-delete-role" data-idx="${i}">Eliminar</button>
                 </div>
             `;
             listRoles.appendChild(div);
@@ -347,12 +347,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const div = document.createElement('div');
             const vehiculoOcupante = vehiculosAdentro.find(v => v.celda === celda.codigo);
             
-            div.className = `celda \${vehiculoOcupante ? 'ocupada' : 'libre'}`;
+            div.className = `celda ${vehiculoOcupante ? 'ocupada' : 'libre'}`;
             // Muestra código y tipo abreviado
-            div.innerHTML = `\${celda.codigo}<br><small style="font-size:0.6em; font-weight:normal">\${celda.tipo}</small>`;
+            div.innerHTML = `${celda.codigo}<br><small style="font-size:0.6em; font-weight:normal">${celda.tipo}</small>`;
             
             if (vehiculoOcupante) {
-                div.innerHTML += `<br><span style="font-size:0.7em; font-weight:bold; color: white;">\${vehiculoOcupante.placa}</span>`;
+                div.innerHTML += `<br><span style="font-size:0.7em; font-weight:bold; color: white;">${vehiculoOcupante.placa}</span>`;
             }
 
             gridCeldas.appendChild(div);
@@ -360,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         celdasTotales = totales;
         if (document.getElementById('cupos-count')) {
-             document.getElementById('cupos-count').innerText = `\${totales - ocupadas} / \${totales}`;
+             document.getElementById('cupos-count').innerText = `${totales - ocupadas} / ${totales}`;
         }
     }
 
@@ -396,12 +396,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const tr = document.createElement('tr');
             const isVigente = p.fechaVencimiento >= hoyStr;
             tr.innerHTML = `
-                <td><strong>\${p.placa}</strong></td>
-                <td>\${p.cliente}</td>
-                <td>\${p.fechaVencimiento}</td>
-                <td><span class="badge \${isVigente ? 'badge-active' : 'badge-inactive'}">\${isVigente ? 'VIGENTE' : 'VENCIDA'}</span></td>
+                <td><strong>${p.placa}</strong></td>
+                <td>${p.cliente}</td>
+                <td>${p.fechaVencimiento}</td>
+                <td><span class="badge ${isVigente ? 'badge-active' : 'badge-inactive'}">${isVigente ? 'VIGENTE' : 'VENCIDA'}</span></td>
                 <td>
-                    <button class="btn-action red btn-delete-pago" data-idx="\${i}">🗑️ Eliminar</button>
+                    <button class="btn-action red btn-delete-pago" data-idx="${i}">🗑️ Eliminar</button>
                 </td>
             `;
             tbodyPagos.appendChild(tr);
