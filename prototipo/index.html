@@ -81,7 +81,7 @@
                     <h2>Vehículos en Parqueadero</h2>
                     <div class="search-box">
                         <span class="icon">🔍</span>
-                        <input type="text" placeholder="Buscar placa...">
+                        <input type="text" id="operario-search-placa" placeholder="Buscar placa...">
                     </div>
                 </div>
                 
@@ -123,9 +123,9 @@
                     <div class="toolbar">
                         <div class="search-box">
                             <span class="icon">🔍</span>
-                            <input type="text" placeholder="Buscar usuario...">
+                            <input type="text" id="admin-search-user" placeholder="Buscar usuario...">
                         </div>
-                        <button class="btn btn-primary btn-sm">+ Crear Usuario</button>
+                        <button class="btn btn-primary btn-sm" id="admin-btn-create-user">+ Crear Usuario</button>
                     </div>
                     <table class="data-table">
                         <thead>
@@ -138,40 +138,8 @@
                                 <th>ACCIONES</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Juan Pérez</td>
-                                <td>123456</td>
-                                <td>juanp</td>
-                                <td>Operario</td>
-                                <td><span class="badge badge-active">ACTIVO</span></td>
-                                <td>
-                                    <button class="btn-action blue">✏️ Editar</button>
-                                    <button class="btn-action red">🗑️ Eliminar</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Carlos López</td>
-                                <td>654321</td>
-                                <td>carlosl</td>
-                                <td>Operario</td>
-                                <td><span class="badge badge-active">ACTIVO</span></td>
-                                <td>
-                                    <button class="btn-action blue">✏️ Editar</button>
-                                    <button class="btn-action red">🗑️ Eliminar</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>María García</td>
-                                <td>789012</td>
-                                <td>mariam</td>
-                                <td>Administrador</td>
-                                <td><span class="badge badge-inactive">INACTIVO</span></td>
-                                <td>
-                                    <button class="btn-action blue">✏️ Editar</button>
-                                    <button class="btn-action red">🗑️ Eliminar</button>
-                                </td>
-                            </tr>
+                        <tbody id="admin-users-tbody">
+                            <!-- Generado por JS -->
                         </tbody>
                     </table>
                 </div>
@@ -184,24 +152,11 @@
                 </div>
                 <div class="admin-card-body">
                     <div class="toolbar">
-                        <input type="text" class="form-control" placeholder="Nombre del rol" style="flex: 1; max-width: 600px;">
-                        <button class="btn btn-primary btn-sm">+ Crear Rol</button>
+                        <input type="text" id="admin-input-role" class="form-control" placeholder="Nombre del rol" style="flex: 1; max-width: 600px;">
+                        <button class="btn btn-primary btn-sm" id="admin-btn-create-role">+ Crear Rol</button>
                     </div>
-                    <div class="roles-list">
-                        <div class="role-item">
-                            <span>💼 <strong>Administrador</strong></span>
-                            <div class="role-actions">
-                                <button class="btn-action outline">Editar</button>
-                                <button class="btn-action red-outline">Eliminar</button>
-                            </div>
-                        </div>
-                        <div class="role-item">
-                            <span>👨‍🔧 <strong>Operario</strong></span>
-                            <div class="role-actions">
-                                <button class="btn-action outline">Editar</button>
-                                <button class="btn-action red-outline">Eliminar</button>
-                            </div>
-                        </div>
+                    <div class="roles-list" id="admin-roles-list">
+                        <!-- Generado por JS -->
                     </div>
                 </div>
             </section>
@@ -213,13 +168,13 @@
                 </div>
                 <div class="admin-card-body">
                     <div class="toolbar">
-                        <input type="text" class="form-control" placeholder="Código (Ej: C1)" style="flex: 1; max-width: 300px;">
-                        <select class="form-control" style="flex: 1; max-width: 300px;">
-                            <option>-- Seleccionar tipo --</option>
-                            <option>Carro</option>
-                            <option>Moto</option>
+                        <input type="text" id="admin-input-celda-code" class="form-control" placeholder="Código (Ej: C1)" style="flex: 1; max-width: 300px;">
+                        <select id="admin-select-celda-type" class="form-control" style="flex: 1; max-width: 300px;">
+                            <option value="">-- Seleccionar tipo --</option>
+                            <option value="Carro">Carro</option>
+                            <option value="Moto">Moto</option>
                         </select>
-                        <button class="btn btn-primary btn-sm">+ Registrar Celda</button>
+                        <button id="admin-btn-create-celda" class="btn btn-primary btn-sm">+ Registrar Celda</button>
                     </div>
                     
                     <div class="stats-grid">
