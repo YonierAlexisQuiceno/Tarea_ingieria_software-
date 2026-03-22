@@ -145,3 +145,132 @@ input[type="text"]:focus, textarea:focus, .form-control:focus, select:focus { bo
     .operario-content { grid-template-columns: 1fr; }
     .stats-grid { grid-template-columns: 1fr; }
 }
+
+/* ================== GESTIÓN DE CELDAS (nuevo mockup) ================== */
+.admin-celda-card {
+    padding: 0;
+    overflow: hidden;
+    border: none;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--purple-grad-1) 0%, var(--purple-grad-2) 100%);
+    padding: 18px 25px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.card-header h2 {
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.card-body {
+    padding: 25px;
+    background: white;
+}
+
+.form-inline {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.form-inline .flex-grow {
+    flex: 1;
+    min-width: 140px;
+    width: auto;
+    padding: 10px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    background: #fff;
+}
+
+.form-inline .flex-grow:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(52,152,219,0.1);
+}
+
+.form-inline .btn {
+    white-space: nowrap;
+    padding: 10px 18px;
+    font-size: 14px;
+}
+
+/* Stats de celdas */
+.cells-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.cells-stats .stat-box {
+    padding: 22px 15px;
+    border-radius: var(--radius-md);
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.stat-number {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    opacity: 0.9;
+}
+
+.stat-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+.stat-indigo { background: linear-gradient(135deg, #6366f1, #4338ca); }
+.stat-blue   { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+
+/* Grid de celdas */
+.cells-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: 10px;
+}
+
+.cell {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    color: white;
+    font-size: 15px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.15s, box-shadow 0.15s;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.cell:hover { transform: scale(1.06); box-shadow: var(--shadow-md); }
+.cell-available { background-color: #2ecc71; }
+.cell-occupied  { background-color: #e74c3c; }
+
+@media (max-width: 600px) {
+    .cells-stats { grid-template-columns: 1fr; }
+    .form-inline { flex-direction: column; }
+    .form-inline .flex-grow, .form-inline .btn { width: 100%; }
+}

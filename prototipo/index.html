@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <!-- Navegación Provisional para el Prototipo -->
     <nav class="prototype-nav">
@@ -35,10 +37,11 @@
             <section class="card form-card">
                 <h2>Registro de Movimiento</h2>
                 <form id="registro-form" onsubmit="event.preventDefault();">
-                    
+
                     <div class="form-group">
                         <label>Placa del Vehículo</label>
-                        <input type="text" id="placa" placeholder="INGRESE PLACA (EJ. ABC-123)" maxlength="6" style="text-transform: uppercase;">
+                        <input type="text" id="placa" placeholder="INGRESE PLACA (EJ. ABC-123)" maxlength="6"
+                            style="text-transform: uppercase;">
                     </div>
 
                     <div class="form-group">
@@ -84,7 +87,7 @@
                         <input type="text" id="operario-search-placa" placeholder="Buscar placa...">
                     </div>
                 </div>
-                
+
                 <table class="data-table">
                     <thead>
                         <tr>
@@ -152,7 +155,8 @@
                 </div>
                 <div class="admin-card-body">
                     <div class="toolbar">
-                        <input type="text" id="admin-input-role" class="form-control" placeholder="Nombre del rol" style="flex: 1; max-width: 600px;">
+                        <input type="text" id="admin-input-role" class="form-control" placeholder="Nombre del rol"
+                            style="flex: 1; max-width: 600px;">
                         <button class="btn btn-primary btn-sm" id="admin-btn-create-role">+ Crear Rol</button>
                     </div>
                     <div class="roles-list" id="admin-roles-list">
@@ -162,37 +166,38 @@
             </section>
 
             <!-- Gestión de Celdas -->
-            <section class="admin-card">
-                <div class="admin-card-header">
+            <section class="card admin-celda-card">
+                <div class="card-header">
                     <h2>🅿️ Gestión de Celdas</h2>
                 </div>
-                <div class="admin-card-body">
-                    <div class="toolbar">
-                        <input type="text" id="admin-input-celda-code" class="form-control" placeholder="Código (Ej: C1)" style="flex: 1; max-width: 300px;">
-                        <select id="admin-select-celda-type" class="form-control" style="flex: 1; max-width: 300px;">
+
+                <div class="card-body">
+                    <div class="form-inline">
+                        <input type="text" id="admin-input-celda-code" placeholder="Código (Ej: C1)" class="flex-grow" />
+                        <select id="admin-select-celda-type" class="flex-grow">
                             <option value="">-- Seleccionar tipo --</option>
-                            <option value="Carro">Carro</option>
-                            <option value="Moto">Moto</option>
+                            <option value="Carro">🚗 Carro</option>
+                            <option value="Moto">🏍️ Moto</option>
                         </select>
-                        <button id="admin-btn-create-celda" class="btn btn-primary btn-sm">+ Registrar Celda</button>
+                        <button id="admin-btn-create-celda" class="btn btn-primary">+ Registrar Celda</button>
                     </div>
-                    
-                    <div class="stats-grid">
-                        <div class="stat-box purple">
-                            <h3><span id="stat-disponibles">8</span></h3>
-                            <p>DISPONIBLES</p>
+
+                    <div class="cells-stats">
+                        <div class="stat-box stat-purple">
+                            <span class="stat-number" id="stat-disponibles">8</span>
+                            <span class="stat-label">DISPONIBLES</span>
                         </div>
-                        <div class="stat-box indigo">
-                            <h3><span id="stat-ocupadas">4</span></h3>
-                            <p>OCUPADAS</p>
+                        <div class="stat-box stat-indigo">
+                            <span class="stat-number" id="stat-ocupadas">4</span>
+                            <span class="stat-label">OCUPADAS</span>
                         </div>
-                        <div class="stat-box blue">
-                            <h3><span id="stat-totales">12</span></h3>
-                            <p>TOTAL</p>
+                        <div class="stat-box stat-blue">
+                            <span class="stat-number" id="stat-totales">12</span>
+                            <span class="stat-label">TOTAL</span>
                         </div>
                     </div>
 
-                    <div class="celdas-grid" id="celdas-grid">
+                    <div class="cells-grid" id="celdas-grid">
                         <!-- Generado por JS -->
                     </div>
                 </div>
@@ -205,12 +210,15 @@
                 </div>
                 <div class="admin-card-body">
                     <div class="toolbar">
-                        <input type="text" id="admin-input-pago-placa" class="form-control" placeholder="Placa (Ej: ABC-123)" style="flex: 1; max-width: 250px;">
-                        <input type="text" id="admin-input-pago-cliente" class="form-control" placeholder="Nombre Cliente" style="flex: 1; max-width: 250px;">
-                        <input type="date" id="admin-input-pago-fecha" class="form-control" style="flex: 1; max-width: 200px;">
+                        <input type="text" id="admin-input-pago-placa" class="form-control"
+                            placeholder="Placa (Ej: ABC-123)" style="flex: 1; max-width: 250px;">
+                        <input type="text" id="admin-input-pago-cliente" class="form-control"
+                            placeholder="Nombre Cliente" style="flex: 1; max-width: 250px;">
+                        <input type="date" id="admin-input-pago-fecha" class="form-control"
+                            style="flex: 1; max-width: 200px;">
                         <button id="admin-btn-create-pago" class="btn btn-primary btn-sm">+ Registrar Pago</button>
                     </div>
-                    
+
                     <table class="data-table" style="margin-top: 15px;">
                         <thead>
                             <tr>
@@ -232,4 +240,5 @@
 
     <script src="app.js"></script>
 </body>
+
 </html>

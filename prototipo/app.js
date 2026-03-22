@@ -347,7 +347,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const div = document.createElement('div');
             const vehiculoOcupante = vehiculosAdentro.find(v => v.celda === celda.codigo);
             
-            div.className = `celda ${vehiculoOcupante ? 'ocupada' : 'libre'}`;
+            div.className = `cell ${vehiculoOcupante ? 'cell-occupied' : 'cell-available'}`;
+            div.title = vehiculoOcupante ? `Ocupada - ${vehiculoOcupante.placa}` : 'Disponible';
             // Muestra código y tipo abreviado
             div.innerHTML = `${celda.codigo}<br><small style="font-size:0.6em; font-weight:normal">${celda.tipo}</small>`;
             
