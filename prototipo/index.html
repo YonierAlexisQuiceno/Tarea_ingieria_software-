@@ -21,114 +21,122 @@
         </div>
     </nav>
 
-    <!-- VISTA OPERARIO -->
+    <!-- ======================== VISTA OPERARIO ======================== -->
     <main id="view-operario" class="view-section active">
-        <header class="operario-header">
-            <div class="brand">
+        <header class="page-header">
+            <div class="page-header-brand">
                 <span class="logo">✔️</span> Autos Colombia - Control de Acceso
             </div>
             <div class="status-badge" id="cupos-badge">
-                <span class="dot"></span> Cupos Disponibles: <strong id="cupos-count">42 / 50</strong>
+                <span class="dot"></span> Cupos Disponibles: <strong id="cupos-count">0 / 0</strong>
             </div>
         </header>
 
         <div class="operario-content">
-            <!-- Panel Izquierdo: Formulario -->
-            <section class="card form-card">
-                <h2>Registro de Movimiento</h2>
-                <form id="registro-form" onsubmit="event.preventDefault();">
+            <!-- Formulario de registro -->
+            <section class="card">
+                <div class="card-header">
+                    <h2>📋 Registro de Movimiento</h2>
+                </div>
+                <div class="card-body">
+                    <form id="registro-form" onsubmit="event.preventDefault();">
 
-                    <div class="form-group">
-                        <label>Placa del Vehículo</label>
-                        <input type="text" id="placa" placeholder="INGRESE PLACA (EJ. ABC-123)" maxlength="6"
-                            style="text-transform: uppercase;">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Tipo de Vehículo</label>
-                        <div class="radio-group">
-                            <label class="radio-card active" id="rf-carro">
-                                <input type="radio" name="tipo" value="Carro" checked>
-                                🚙 Carro
-                            </label>
-                            <label class="radio-card" id="rf-moto">
-                                <input type="radio" name="tipo" value="Moto">
-                                🏍️ Moto
-                            </label>
+                        <div class="form-group">
+                            <label>Placa del Vehículo</label>
+                            <input type="text" id="placa" placeholder="INGRESE PLACA (EJ. ABC-123)" maxlength="6"
+                                style="text-transform: uppercase;">
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label>Novedades / Observaciones</label>
-                        <textarea id="novedades" rows="3" placeholder="Rayón en puerta derecha, etc."></textarea>
-                    </div>
+                        <div class="form-group">
+                            <label>Tipo de Vehículo</label>
+                            <div class="radio-group">
+                                <label class="radio-card active" id="rf-carro">
+                                    <input type="radio" name="tipo" value="Carro" checked>
+                                    🚙 Carro
+                                </label>
+                                <label class="radio-card" id="rf-moto">
+                                    <input type="radio" name="tipo" value="Moto">
+                                    🏍️ Moto
+                                </label>
+                            </div>
+                        </div>
 
-                    <div class="info-box" id="mensualidad-info">
-                        ℹ️ Estado de Mensualidad: <em>Esperando placa...</em>
-                    </div>
+                        <div class="form-group">
+                            <label>Novedades / Observaciones</label>
+                            <textarea id="novedades" rows="3" placeholder="Rayón en puerta derecha, etc."></textarea>
+                        </div>
 
-                    <div class="action-buttons">
-                        <button class="btn btn-success" id="btn-registrar-entrada">
-                            <span>📥 REGISTRAR ENTRADA</span>
-                        </button>
-                        <button class="btn btn-danger" id="btn-registrar-salida">
-                            <span>📤 REGISTRAR SALIDA</span>
-                        </button>
-                    </div>
-                </form>
+                        <div class="info-box" id="mensualidad-info">
+                            ℹ️ Estado de Mensualidad: <em>Esperando placa...</em>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="btn btn-success" id="btn-registrar-entrada">
+                                <span>📥 REGISTRAR ENTRADA</span>
+                            </button>
+                            <button class="btn btn-danger" id="btn-registrar-salida">
+                                <span>📤 REGISTRAR SALIDA</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </section>
 
-            <!-- Panel Derecho: Lista -->
-            <section class="card list-card">
-                <div class="list-header">
-                    <h2>Vehículos en Parqueadero</h2>
-                    <div class="search-box">
+            <!-- Lista de vehículos -->
+            <section class="card">
+                <div class="card-header">
+                    <h2>🚗 Vehículos en Parqueadero</h2>
+                    <div class="search-box header-search">
                         <span class="icon">🔍</span>
                         <input type="text" id="operario-search-placa" placeholder="Buscar placa...">
                     </div>
                 </div>
-
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>PLACA</th>
-                            <th>TIPO</th>
-                            <th>HORA INGRESO</th>
-                            <th>MENSUALIDAD</th>
-                            <th>ACCIONES</th>
-                        </tr>
-                    </thead>
-                    <tbody id="vehiculos-tbody">
-                        <!-- Generado por JS -->
-                    </tbody>
-                </table>
-                <div class="table-footer">
-                    <em id="table-summary">Mostrando vehículos actualmente estacionados.</em>
+                <div class="card-body">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>PLACA</th>
+                                <th>TIPO</th>
+                                <th>HORA INGRESO</th>
+                                <th>MENSUALIDAD</th>
+                                <th>ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vehiculos-tbody">
+                            <!-- Generado por JS -->
+                        </tbody>
+                    </table>
+                    <div class="table-footer">
+                        <em id="table-summary">Mostrando vehículos actualmente estacionados.</em>
+                    </div>
                 </div>
             </section>
         </div>
     </main>
 
-    <!-- VISTA ADMINISTRADOR -->
+    <!-- ======================== VISTA ADMINISTRADOR ======================== -->
     <main id="view-admin" class="view-section">
-        <header class="admin-header">
-            <h1>⚙️ Panel Administrador</h1>
-            <p>Gestión integral del sistema de celdas de almacenamiento</p>
+        <header class="page-header admin">
+            <div class="page-header-brand">
+                <span class="logo">⚙️</span> Panel Administrador
+            </div>
+            <p class="page-header-sub">Gestión integral del sistema de parqueadero</p>
         </header>
 
         <div class="admin-content">
+
             <!-- Gestión de Usuarios -->
-            <section class="admin-card">
-                <div class="admin-card-header">
+            <section class="card">
+                <div class="card-header">
                     <h2>👤 Gestión de Usuarios (Operarios)</h2>
+                    <button class="btn btn-primary btn-sm" id="admin-btn-create-user">+ Crear Usuario</button>
                 </div>
-                <div class="admin-card-body">
-                    <div class="toolbar">
-                        <div class="search-box">
+                <div class="card-body">
+                    <div class="form-inline">
+                        <div class="search-box" style="flex:1;">
                             <span class="icon">🔍</span>
                             <input type="text" id="admin-search-user" placeholder="Buscar usuario...">
                         </div>
-                        <button class="btn btn-primary btn-sm" id="admin-btn-create-user">+ Crear Usuario</button>
                     </div>
                     <table class="data-table">
                         <thead>
@@ -149,14 +157,13 @@
             </section>
 
             <!-- Gestión de Roles -->
-            <section class="admin-card">
-                <div class="admin-card-header">
+            <section class="card">
+                <div class="card-header">
                     <h2>🔐 Gestión de Roles</h2>
                 </div>
-                <div class="admin-card-body">
-                    <div class="toolbar">
-                        <input type="text" id="admin-input-role" class="form-control" placeholder="Nombre del rol"
-                            style="flex: 1; max-width: 600px;">
+                <div class="card-body">
+                    <div class="form-inline">
+                        <input type="text" id="admin-input-role" class="flex-grow" placeholder="Nombre del rol">
                         <button class="btn btn-primary btn-sm" id="admin-btn-create-role">+ Crear Rol</button>
                     </div>
                     <div class="roles-list" id="admin-roles-list">
@@ -166,33 +173,32 @@
             </section>
 
             <!-- Gestión de Celdas -->
-            <section class="card admin-celda-card">
+            <section class="card">
                 <div class="card-header">
                     <h2>🅿️ Gestión de Celdas</h2>
                 </div>
-
                 <div class="card-body">
                     <div class="form-inline">
-                        <input type="text" id="admin-input-celda-code" placeholder="Código (Ej: C1)" class="flex-grow" />
+                        <input type="text" id="admin-input-celda-code" placeholder="Código (Ej: C1)" class="flex-grow">
                         <select id="admin-select-celda-type" class="flex-grow">
                             <option value="">-- Seleccionar tipo --</option>
                             <option value="Carro">🚗 Carro</option>
                             <option value="Moto">🏍️ Moto</option>
                         </select>
-                        <button id="admin-btn-create-celda" class="btn btn-primary">+ Registrar Celda</button>
+                        <button id="admin-btn-create-celda" class="btn btn-primary btn-sm">+ Registrar Celda</button>
                     </div>
 
                     <div class="cells-stats">
                         <div class="stat-box stat-purple">
-                            <span class="stat-number" id="stat-disponibles">8</span>
+                            <span class="stat-number" id="stat-disponibles">0</span>
                             <span class="stat-label">DISPONIBLES</span>
                         </div>
                         <div class="stat-box stat-indigo">
-                            <span class="stat-number" id="stat-ocupadas">4</span>
+                            <span class="stat-number" id="stat-ocupadas">0</span>
                             <span class="stat-label">OCUPADAS</span>
                         </div>
                         <div class="stat-box stat-blue">
-                            <span class="stat-number" id="stat-totales">12</span>
+                            <span class="stat-number" id="stat-totales">0</span>
                             <span class="stat-label">TOTAL</span>
                         </div>
                     </div>
@@ -203,23 +209,22 @@
                 </div>
             </section>
 
-            <!-- Gestión de Pagos (Mensualidades) -->
-            <section class="admin-card">
-                <div class="admin-card-header">
+            <!-- Gestión de Pagos -->
+            <section class="card">
+                <div class="card-header">
                     <h2>💳 Gestión de Pagos (Mensualidades)</h2>
                 </div>
-                <div class="admin-card-body">
-                    <div class="toolbar">
-                        <input type="text" id="admin-input-pago-placa" class="form-control"
-                            placeholder="Placa (Ej: ABC-123)" style="flex: 1; max-width: 250px;">
-                        <input type="text" id="admin-input-pago-cliente" class="form-control"
-                            placeholder="Nombre Cliente" style="flex: 1; max-width: 250px;">
-                        <input type="date" id="admin-input-pago-fecha" class="form-control"
-                            style="flex: 1; max-width: 200px;">
+                <div class="card-body">
+                    <div class="form-inline">
+                        <input type="text" id="admin-input-pago-placa" class="flex-grow"
+                            placeholder="Placa (Ej: ABC-123)">
+                        <input type="text" id="admin-input-pago-cliente" class="flex-grow"
+                            placeholder="Nombre Cliente">
+                        <input type="date" id="admin-input-pago-fecha" class="flex-grow">
                         <button id="admin-btn-create-pago" class="btn btn-primary btn-sm">+ Registrar Pago</button>
                     </div>
 
-                    <table class="data-table" style="margin-top: 15px;">
+                    <table class="data-table">
                         <thead>
                             <tr>
                                 <th>PLACA</th>
@@ -235,6 +240,7 @@
                     </table>
                 </div>
             </section>
+
         </div>
     </main>
 
